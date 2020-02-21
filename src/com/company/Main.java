@@ -19,5 +19,6 @@ public class Main {
         System.out.print(messageEncryption[counter] += 1);
         counter++;}
 
+
     }
 }
