@@ -24,14 +24,14 @@ public class Main {
         System.out.println("\n");
 
         System.out.print("Ihre Nachricht: ");
-        System.out.println(message);
+        System.out.println(message+"\n");
 
         message = adaptMessage(message); //Umlaute werden ersetzt (ä = ae etc.)
         int lengthMessage = message.length();
         char[] messageEncryption = message.toCharArray();//Der String message wird in ein Character Array gespeichert
 
         System.out.print("Ihre Nachricht ohne Umlaute: ");
-        System.out.println(message);
+        System.out.println(message+"\n");
 
 
         for (int i = 0; i < lengthMessage; i++) {
@@ -49,7 +49,7 @@ public class Main {
         }
 
         System.out.print("Ihre Nachricht verschlüsselt: ");
-        System.out.print(encryptedMessage + "\n");
+        System.out.print(encryptedMessage+"\n");
 
         char[] messageDecryption = encryptedMessage.toCharArray(); //Die verschlüsselte Nachricht wird in ein neues Array gespeichert
 
@@ -72,12 +72,10 @@ public class Main {
             }
         }
         System.out.print("Ihre Nachricht Entschlüsselt: ");
-        System.out.println(decryptedMessage);
-
-        System.out.println();
+        System.out.println(decryptedMessage+"\n");
 
         System.out.print("Ihre originale Nachricht: ");
-        System.out.print(originalMessage);}
+        System.out.print(originalMessage+"\n");}
 
     private static String adaptMessage(String message) {
         message = message.replace("ä", "ae");
