@@ -6,7 +6,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        // Verschlüssle diese Nachricht: "DASISTEINEGEHEIMENACHRICHT"
+        // Verschlüssle eine Nachricht.
         // Nutze die Cäsar Verschlüsselung zb. A -> B/ X -> Y
 
         Scanner userInput = new Scanner(System.in);
@@ -14,15 +14,25 @@ public class Main {
         System.out.println("Geben Sie Ihre zu verschlüsselnde Nachricht ein.");
         String message = userInput.nextLine();
 
-        char[] messageEncryption = message.toCharArray();//Der String message wird in ein Character Array gespeichert
-        int lengthMessage = message.length();
+
         String encryptedMessage = "";
         String decryptedMessage = "";
+        String originalMessage = message;
+
 
 
         System.out.println("\n");
 
-        System.out.print("Verschlüsselt: ");
+        System.out.print("Ihre Nachricht: ");
+        System.out.println(message);
+
+        message = adaptMessage(message); //Umlaute werden ersetzt (ä = ae etc.)
+        int lengthMessage = message.length();
+        char[] messageEncryption = message.toCharArray();//Der String message wird in ein Character Array gespeichert
+
+        System.out.print("Ihre Nachricht ohne Umlaute: ");
+        System.out.println(message);
+
 
         for (int i = 0; i < lengthMessage; i++) {
             char encryptedChar;
@@ -31,18 +41,20 @@ public class Main {
                     (messageEncryption[i] == (';')) || (messageEncryption[i] == (':')) || (messageEncryption[i] == (' ')))) {
                 encryptedChar = messageEncryption[i];
                 encryptedMessage = encryptedMessage + Character.toString(encryptedChar);
-            } else {
-                encryptedChar = messageEncryption[i] += 7;
+            }
+            else {
+                encryptedChar = messageEncryption[i] += 1;
                 encryptedMessage = encryptedMessage + Character.toString(encryptedChar);
             }
         }
 
+        System.out.print("Ihre Nachricht verschlüsselt: ");
+        System.out.print(encryptedMessage + "\n");
 
         char[] messageDecryption = encryptedMessage.toCharArray(); //Die verschlüsselte Nachricht wird in ein neues Array gespeichert
-        System.out.println(encryptedMessage + "\n");
 
 
-        System.out.print("Entschlüsselt: ");
+
 
         int lengthEncryptedMessage = encryptedMessage.length();
 
@@ -53,14 +65,33 @@ public class Main {
                     (messageDecryption[j] == (';')) || (messageDecryption[j] == (':')) || (messageDecryption[j] == (' ')))) {
                 decryptedChar = messageDecryption[j];
                 decryptedMessage = decryptedMessage + Character.toString(decryptedChar);
+
             } else {
-                decryptedChar = messageDecryption[j] -= 7;
+                decryptedChar = messageDecryption[j] -= 1;
                 decryptedMessage = decryptedMessage + Character.toString(decryptedChar);
             }
         }
+        System.out.print("Ihre Nachricht Entschlüsselt: ");
         System.out.println(decryptedMessage);
+
+        System.out.println();
+
+        System.out.print("Ihre originale Nachricht: ");
+        System.out.print(originalMessage);}
+
+    private static String adaptMessage(String message) {
+        message = message.replace("ä", "ae");
+        message = message.replace("Ä", "Ae");
+        message = message.replace("ü", "ue");
+        message = message.replace("Ü", "Ue");
+        message = message.replace("ö", "oe");
+        message = message.replace("Ö", "Oe");
+        return message;
     }
 }
+
+
+
 
 
 
