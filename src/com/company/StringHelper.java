@@ -78,6 +78,7 @@ public class StringHelper {
 
     public static void printAmountOfLetters(String word) {
 
+
         char[] wordArray = word.toCharArray();
         char[] alphabet = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
         int[] counter = new int[alphabet.length];
