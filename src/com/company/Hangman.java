@@ -39,7 +39,7 @@ public class Hangman {
 
         char[] hiddenWordChar = wordOnDisplay.toCharArray(); //casts the String into a CharArray
 
-        chooseLevel = chooseLevel(input, chooseLevel); //Player get´s to chose the difficulty
+        chooseLevel = chooseLevel(input, chooseLevel); //Player get´s to choose the difficulty
 
         startGame(wordInGame, chooseLevel, hiddenWordChar, userLevel); //Game starts and waits for the first userinput
 
