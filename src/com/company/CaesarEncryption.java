@@ -85,6 +85,7 @@ public class CaesarEncryption {
         message = message.replace("ö", "oe");
         message = message.replace("Ö", "Oe");
         return message;
+
     }
 }
 
