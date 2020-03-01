@@ -47,14 +47,13 @@ public class StringHelper {
         int count = 0;
 
 
-
         char[] textArray = word.toCharArray();
 
         for (int i = 0; i < word.length(); i++) {
             if (textArray[i] == letter)
                 count++;
         }
-        System.out.println("Letter " + letter + " was found " + count + " times in your sentence.");
+        System.out.println("Lettercounter:\n\nYou picked the letter " + letter + "\nIt was found " + count + " times in your word/sentence.");
 
         return count;
     }
@@ -68,7 +67,7 @@ public class StringHelper {
             reverse = reverse + word.charAt(i);
         }
 
-        System.out.println("Word backwards is: ");
+        System.out.println("Word backwards is:\n");
         System.out.println(reverse);
 
         return reverse;
@@ -82,6 +81,7 @@ public class StringHelper {
         char[] wordArray = word.toCharArray();
         char[] alphabet = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
         int[] counter = new int[alphabet.length];
+        int lineCounter = 0;
 
         String output = "";
 
@@ -97,13 +97,23 @@ public class StringHelper {
         }
 
         for (int i = 0; i < alphabet.length; i++) {
+
+
             if (output.isEmpty()) {
-                output = alphabet[i] + " - " + counter[i];
+                output = "\t" + alphabet[i] + " - " + counter[i] + "\t ";
+                lineCounter++;
             } else {
-                output = output + "\n" + alphabet[i] + " - " + counter[i];
+                output = output + "\t" + alphabet[i] + " - " + counter[i] + "\t";
+                lineCounter++;
             }
+            if (lineCounter == 5) {
+                output = output + "\n";
+                lineCounter = 0;
+            }
+
+
         }
-        System.out.println(output);
+        System.out.println("Amount of Letters: \n\n" + output);
     }
 }
 
