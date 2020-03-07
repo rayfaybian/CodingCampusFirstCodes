@@ -117,7 +117,8 @@ public class Hangman {
             }
 
         if (lose) {
-            System.out.println("Du hast leider verloren.\nDas gesuchte Wort war " + wordInGame + ".");
+            System.out.println("\nDas gesuchte Wort war " + wordInGame + ".\nDu bist tot ☠");
+
         } else {
             System.out.println("Gratulation, du hast das Wort " + wordInGame + " in " + tries + " Versuchen erraten");
         }

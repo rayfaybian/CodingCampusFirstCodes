@@ -3,33 +3,48 @@ package com.company;
 import java.util.Scanner;
 
 public class FourInARow {
+    private static boolean isEnglish = true;
     private static boolean gameOver = false;
     private static boolean isFinished = false;
     private static boolean isPlayerX = true;
-    private static int row;
-    private static int column;
+    private static boolean userInputIsOkay = false;
     private static char x = 'X';
     private static char o = 'O';
-    private static char[][] field = new char[3][3];
+    private static char[][] field = new char[6][7];
     private static Scanner input = new Scanner(System.in);
     private static StringBuilder output = new StringBuilder();
     private static int turnCounter = 0;
-    private static String currentPlayer = "";
+    private static String currentPlayerSymbol = "";
+    private static String currentPlayerName = "";
+    private static String playerXName = "";
+    private static String playerOName = "";
 
     public static void main(String[] args) {
-        // create a TicTacToe game
+        language();
+        getNames();
         game();
     }
 
     private static void game() {
 
+
         while (!gameOver) {
 
+            if (isEnglish) {
+                System.out.println("\nWelcome to Four In A Row." +
+                        "\nBeat the other player by placing 4 chips into a straight line." +
+                        "\nX will make the first move.\n");
+            } else {
+                System.out.println("\nWillkommen bei Vier gewinnt." +
+                        "\nBesiege deinen Gegenspieler indem du 4 Symbole in eine gerade Linie bringst");
+            }
 
-            System.out.println("\nWelcome to Four In A Row.\nBeat the other player " +
-                    "by placing 4 X´s or 4 O`s into a straight line.\nX will make the first move.\n");
             printBoard();
-            System.out.println("Type in a row, a coma, and a column. For example 1,1");
+            if (isEnglish) {
+                System.out.println("Enter the number of the column where you want to drop your chip.");
+            } else {
+                System.out.println("Gib die Zahl der Spalte an in die du dein Symbol setzen möchtest.");
+            }
 
             while (!isFinished) {
 
@@ -38,66 +53,84 @@ public class FourInARow {
                 printBoard();
                 checkForWinner();
             }
+
             newGame();
 
         }
     }
 
-
     private static void getUserInput() {
+        boolean fieldIsEmpty = false;
+        userInputIsOkay = false;
+        int row = 5;
+        while (!userInputIsOkay) {
+            try {
+                int playersColumn = input.nextInt() - 1;
 
-        try {
-            String[] userInput = input.next().split(",");
+                while (!fieldIsEmpty)
+                    if (field[row][playersColumn] == x | field[row][playersColumn] == o) {
+                        row--;
+                    } else {
+                        fieldIsEmpty = true;
+                        userInputIsOkay = true;
+                    }
 
-            row = Integer.parseInt(userInput[0]);
-            column = Integer.parseInt(userInput[1]);
-
-
-            if (field[row-1][column-1] == x | field[row-1][column-1] == o) {
-                System.out.println("Spot already taken! Try an empty field.");
-                System.out.println("Enter the coordinates where you want to place a " + currentPlayer + "\n");
-                getUserInput();
+                if (isPlayerX) {
+                    field[row][playersColumn] = x;
+                } else {
+                    field[row][playersColumn] = o;
+                }
+            } catch (NumberFormatException e1) {
+                if (isEnglish) {
+                    System.err.println("Invalid input! Pick a column between 1-7.");
+                    System.out.println(currentPlayerName + ", your turn.\n");
+                } else {
+                    System.err.println("Eingabe Fehlerhaft! Wähle eine Spalte zwischen 1 und 7.");
+                    System.out.println(currentPlayerName + ", du bist dran.\n");
+                }
+            } catch (ArrayIndexOutOfBoundsException e2) {
+                if (isEnglish) {
+                    System.err.println("Invalid input. Pick a number between 1-7.");
+                    System.out.println(currentPlayerName + ", your turn.\n");
+                } else {
+                    System.err.println("Eingabe Fehlerhaft! Wähle eine Spalte zwischen 1 und 7.");
+                    System.out.println(currentPlayerName + ", du bist dran.\n");
+                }
             }
-
-
-            if (isPlayerX) {
-                field[row-1][column-1] = x;
-            } else {
-                field[row-1][column-1] = o;
-            }
-
-
-        } catch (Exception e) {
-            System.out.println("Invalid input. Try again!");
-            System.out.println("Enter the coordinates where you want to place a " + currentPlayer + "\n");
-            getUserInput();
         }
-    }
-    //player can type in the coordinates for his next move into the console
+    }//player can pick which column he wants to drop his next chip
 
     private static void determinePlayer() {
         turnCounter++;
+
         if (isPlayerX) {
-            currentPlayer = "X";
+            currentPlayerName = playerXName;
+            currentPlayerSymbol = "X";
         } else {
-            currentPlayer = "O";
+            currentPlayerName = playerOName;
+            currentPlayerSymbol = "O";
         }
-        System.out.println("Enter the coordinates where you want to place a " + currentPlayer + "\n");
+        if (isEnglish) {
+            System.out.println(currentPlayerName + ", your turn.\n");
+        } else {
+            System.out.println(currentPlayerName + ", du bist dran.\n");
+        }
+
     } //switches between X & O after every round
 
     private static void printBoard() {
         int columnCounter = 0;
         System.out.println();
-        output.append("   0 1 2\n");
-        for (int i = 0; i < 3; i++) {
-            output.append(i).append(" ");
-            for (int j = 0; j < 3; j++) {
-                output.append("|");
+        output.append("   1   2   3   4   5   6   7\n");
+        for (int i = 0; i < 6; i++) {
+            //output.append(i+1).append(" ");
+            for (int j = 0; j < 7; j++) {
+                output.append(" | ");
                 output.append(field[i][j]);
                 columnCounter++;
             }
-            if (columnCounter == 3) {
-                output.append("|\n");
+            if (columnCounter == 7) {
+                output.append(" |\n");
                 columnCounter = 0;
             }
         }
@@ -115,64 +148,106 @@ public class FourInARow {
             isPlayerX = true;
         }
 
-        for (int i = 0; i < field.length; i++)
-            if ((field[0][i] == winner) && (field[1][i] == winner) && (field[2][i] == winner)) {
-                isFinished = true;
-            } else if (((field[i][0]) == winner) && ((field[i][1]) == winner) && ((field[i][2]) == winner)) {
-                isFinished = true;
-            } else if (((field[0][0]) == winner) && ((field[1][1]) == winner) && ((field[2][2]) == winner)) {
-                isFinished = true;
-            } else if (((field[0][2]) == winner) && ((field[1][1]) == winner) && ((field[2][0]) == winner)) {
-                isFinished = true;
+        for (char[] chars : field) {
+            for (int col = 0; col < chars.length - 3; col++) {
+                if ((chars[col] == winner) && (chars[col] == chars[col + 1])
+                        && (chars[col] == chars[col + 2])
+                        && (chars[col] == chars[col + 3])) {
+                    System.out.println("Player " + winner + " has won!");
+                    isFinished = true;
+                }
             }
+        } //check horizontally
 
-        if (isFinished) {
-            System.out.println(winner + " has won the game!\nCongratulations!");
-        }
+        for (int col = 0; col < field[0].length; col++) {
+            for (int row = 0; row < field.length - 3; row++) {
+                if ((field[row][col] == winner) && (field[row][col] == field[row + 1][col])
+                        && (field[row][col] == field[row + 2][col])
+                        && (field[row][col] == field[row + 3][col])) {
+                    System.out.println("Player " + winner + " has won!");
+                    isFinished = true;
+                }
+            }
+        } //check vertically
 
+        for (int row = 0; row < field.length - 3; row++) {
+            for (int col = 0; col < field[row].length - 3; col++) {
+                if ((field[row][col] == winner) && (field[row][col] == field[row + 1][col + 1])
+                        && (field[row][col] == field[row + 2][col + 2])
+                        && (field[row][col] == field[row + 3][col + 3])) {
+                    System.out.println("Player " + winner + " has won!");
+                    isFinished = true;
+                }
+            }
+        } //check diagonally first direction
 
-        if ((turnCounter == 9) && (!isFinished)) {
+        for (int row = 0; row < field.length - 3; row++) {
+            for (int col = 3; col < field[row].length; col++) {
+                if ((field[row][col] == winner) && (field[row][col] == field[row + 1][col - 1])
+                        && (field[row][col] == field[row + 2][col - 2])
+                        && (field[row][col] == field[row + 3][col - 3])) {
+                    System.out.println("Player " + winner + " has won!");
+                    isFinished = true;
+                }
+            }
+        } //check diagonally second direction
+
+        if ((turnCounter == 42) && (!isFinished)) {
             System.out.println("No winner. It´s a draw!");
             isFinished = true;
-        }
+        } //check for draw
+    }//checks if either player has won or if it´s a draw
 
+    private static void newGame() {
+        userInputIsOkay = false;
+        while (!userInputIsOkay) {
 
-    } //checks if the game is won by either player
-
-    private static boolean newGame() {
-        System.out.println("\nDo you want to play again? y/n");
-
-        try {
-            String answer = input.next();
-            if (answer.equalsIgnoreCase("y")) {
-                resetGame(field);
-                game();
-            }
-            if (answer.equalsIgnoreCase("n")) {
-                System.out.println("Thanks for playing. See ya!");
-                gameOver = true;
+            if (isEnglish) {
+                System.out.println("\nDo you want to play again? Ⓨ/Ⓝ");
             } else {
-                System.out.println("Wrong input!");
-                newGame();
+                System.out.println("\nWollt ihr noch eine Runde spielen? Ⓨ/Ⓝ");
             }
+            try {
+                String answer = input.next();
+                if (answer.equalsIgnoreCase("y")) {
+                    userInputIsOkay = true;
+                    resetGame();
+                    game();
+                }
+                if (answer.equalsIgnoreCase("n")) {
+                    if (isEnglish) {
+                        System.out.println("ッ Thanks for playing. See ya! ッ");
+                    } else {
+                        System.out.println("ッ Danke für´s spielen. Bis bald! ッ");
+                    }
+                    userInputIsOkay = true;
+                    gameOver = true;
+                } else {
+                    if (isEnglish) {
+                        System.err.println("Wrong input!");
+                    } else {
+                        System.err.println("Eingabe Fehlerhaft!");
+                    }
+                }
+            } catch (Exception e) {
+                if (isEnglish) {
+                    System.err.println("Wrong input!");
+                } else {
+                    System.err.println("Eingabe Fehlerhaft!");
+                }
 
-        } catch (Exception e) {
-            System.out.println("Wrong input!");
-            newGame();
-
+            }
         }
 
-
-        return gameOver;
     }//asks you if you want a rematch or quit the game
 
-    private static void resetGame(char[][] field) {
+    private static void resetGame() {
         gameOver = false;
         isFinished = false;
         isPlayerX = true;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                field[i][j] = '\u0000';
+        for (int row = 0; row < 6; row++) {
+            for (int col = 0; col < 7; col++) {
+                field[row][col] = '\u0000';
 
             }
 
@@ -180,4 +255,42 @@ public class FourInARow {
 
     }//empties the board and resets all values to their default
 
+    private static boolean language() {
+        System.out.println("\n\nLanguage/Sprache\n\n\t1 English\n\t2 Deutsch\n");
+        int languageCode = input.nextInt();
+        switch (languageCode) {
+            case 1:
+                isEnglish = true;
+                break;
+            case 2:
+                isEnglish = false;
+                break;
+            default:
+                System.out.println("Wrong input!/Falsche Eingabe!");
+        }
+        return isEnglish;
+    }
+
+    private static void getNames() {
+        if (isEnglish) {
+            System.out.println("Player X, what´s your name?");
+            playerXName = input.next();
+            System.out.println("Hello " + playerXName + "!\n");
+
+            System.out.println("Player O, what´s your name?");
+            playerOName = input.next();
+            System.out.println("Hello " + playerOName + "!\n");
+        } else {
+            System.out.println("Spieler X, wie ist dein Name?");
+            playerXName = input.next();
+
+            System.out.println("Hallo " + playerXName + "!\n");
+
+            System.out.println("Spieler O, wie ist dein Name?");
+            playerOName = input.next();
+            System.out.println("Hallo " + playerOName + "!\n");
+        }
+    }
+
 }
+

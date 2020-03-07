@@ -6,7 +6,8 @@ public class TicTacToe {
     private static boolean gameOver = false;
     private static boolean isFinished = false;
     private static boolean isPlayerX = true;
-    private static int row;
+    private static boolean userInputIsOkay = false;
+        private static int row;
     private static int column;
     private static char x = 'X';
     private static char o = 'O';
@@ -37,13 +38,16 @@ public class TicTacToe {
                 getUserInput();
                 printBoard();
                 checkForWinner();
-            }   newGame();
+            }
+            newGame();
 
         }
     }
 
 
     private static void getUserInput() {
+        userInputIsOkay = false;
+        while(!userInputIsOkay)
 
         try {
             String[] userInput = input.next().split(",");
@@ -51,27 +55,29 @@ public class TicTacToe {
             row = Integer.parseInt(userInput[0]);
             column = Integer.parseInt(userInput[1]);
 
-
-            if (field[row-1][column-1] == x | field[row-1][column-1] == o) {
+            if (field[row - 1][column - 1] == x | field[row - 1][column - 1] == o) {
                 System.out.println("Spot already taken! Try an empty field.");
                 System.out.println("Enter the coordinates where you want to place a " + currentPlayer + "\n");
-                getUserInput();
-            }
 
+            } else{
+                userInputIsOkay = true;
+            }
 
             if (isPlayerX) {
-                field[row-1][column-1] = x;
+                field[row - 1][column - 1] = x;
             } else {
-                field[row-1][column-1] = o;
+                field[row - 1][column - 1] = o;
             }
 
-
-        } catch (Exception e) {
-            System.out.println("Invalid input. Try again!");
+        } catch (NumberFormatException e1) {
+            System.err.println("Invalid input. Try again!");
             System.out.println("Enter the coordinates where you want to place a " + currentPlayer + "\n");
-            getUserInput();
+        } catch (ArrayIndexOutOfBoundsException e2) {
+            System.err.println("Field " + row + "," + column + " does not exist. Try again!");
+
         }
     }
+
     //player can type in the coordinates for his next move into the console
 
     private static void determinePlayer() {
@@ -89,7 +95,7 @@ public class TicTacToe {
         System.out.println();
         output.append("   1 2 3\n");
         for (int i = 0; i < 3; i++) {
-            output.append(i+1).append(" ");
+            output.append(i + 1).append(" ");
             for (int j = 0; j < 3; j++) {
                 output.append("|");
                 output.append(field[i][j]);
@@ -165,11 +171,11 @@ public class TicTacToe {
         return gameOver;
     }//asks you if you want a rematch or quit the game
 
-    private static void resetGame(char[][] field){
+    private static void resetGame(char[][] field) {
         gameOver = false;
         isFinished = false;
         isPlayerX = true;
-        for (int i = 0; i < 3 ; i++) {
+        for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 field[i][j] = '\u0000';
 
