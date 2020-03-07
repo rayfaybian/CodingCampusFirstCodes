@@ -1,11 +1,11 @@
 package com.company;
 
-import java.util.Objects;
 import java.util.Scanner;
 
 public class TicTacToe {
+    private static boolean gameOver = false;
     private static boolean isFinished = false;
-    private static boolean playerX = true;
+    private static boolean isPlayerX = true;
     private static int row;
     private static int column;
     private static char x = 'X';
@@ -14,6 +14,8 @@ public class TicTacToe {
     private static Scanner input = new Scanner(System.in);
     //private static String output = "";
     private static StringBuilder output2 = new StringBuilder();
+    private static int turnCounter = 0;
+    private static String currentPlayer = "";
 
     public static void main(String[] args) {
         // create a TicTacToe game
@@ -22,76 +24,94 @@ public class TicTacToe {
 
     private static void game() {
 
-        System.out.println("\nWelcome to TicTacToe.\nBeat the other player by placing 3 X´s or 3 O`s into a straight line.\nX will make the first move.\n");
-        printBoard();
+        while (!gameOver) {
 
-        while (!isFinished) {
-            //output = "";
 
-            determinePlayer();
-            getUserInput();
+            System.out.println("\nWelcome to TicTacToe.\nBeat the other player by placing 3 X´s or 3 O`s into a straight line.\nX will make the first move.\n");
             printBoard();
-            checkForWinner();
-        }
+            System.out.println("Type in a row, a coma, and a column. For example 1,1");
 
+            while (!isFinished) {
+
+                determinePlayer();
+                getUserInput();
+                printBoard();
+                checkForWinner();
+            }   newGame();
+
+        }
     }
 
+
     private static void getUserInput() {
-        int row;
-        int column;
-        String[] userInput = input.next().split(",");
 
-        row = Integer.parseInt(userInput[0]);
-        column = Integer.parseInt(userInput[1]);
+        try {
+            String[] userInput = input.next().split(",");
 
-        if (playerX) {
-            field[row][column] = x;
+            row = Integer.parseInt(userInput[0]);
+            column = Integer.parseInt(userInput[1]);
 
-        } else {
-            field[row][column] = o;
 
+            if (field[row][column] == x | field[row][column] == o) {
+                System.out.println("Spot already taken! Try an empty field.");
+                System.out.println("Enter the coordinates where you want to place a " + currentPlayer + "\n");
+                getUserInput();
+            }
+
+
+            if (isPlayerX) {
+                field[row][column] = x;
+            } else {
+                field[row][column] = o;
+            }
+
+
+        } catch (Exception e) {
+            System.out.println("Invalid input. Try again!");
+            System.out.println("Enter the coordinates where you want to place a " + currentPlayer + "\n");
+            getUserInput();
         }
-    } //player can type in the coordinates for his next move into the console
+    }
+    //player can type in the coordinates for his next move into the console
 
     private static void determinePlayer() {
-        if (playerX) {
-            System.out.println("Enter the coordinates where you want to place an X.\n");
+        turnCounter++;
+        if (isPlayerX) {
+            currentPlayer = "X";
         } else {
-            System.out.println("Enter the coordinates where you want to place an O.\n");
+            currentPlayer = "O";
         }
+        System.out.println("Enter the coordinates where you want to place a " + currentPlayer + "\n");
     } //switches between X & O after every round
 
     private static void printBoard() {
         int columnCounter = 0;
         System.out.println();
+        output2.append("   0 1 2\n");
         for (int i = 0; i < 3; i++) {
+            output2.append(i).append(" ");
             for (int j = 0; j < 3; j++) {
-                //output = output + ("|" + field[i][j]);
                 output2.append("|");
                 output2.append(field[i][j]);
-
                 columnCounter++;
             }
             if (columnCounter == 3) {
-                //output = output + ("|\n");
                 output2.append("|\n");
                 columnCounter = 0;
             }
-
         }
-        //System.out.println(output);
         System.out.println(output2);
         output2.setLength(0);
     } //prints the board after every turn containing all previous executed moves
 
     private static void checkForWinner() {
         char winner;
-        if (playerX) {
+        if (isPlayerX) {
             winner = x;
-            playerX = false;
+            isPlayerX = false;
         } else {
             winner = o;
-            playerX = true;
+            isPlayerX = true;
         }
 
         for (int i = 0; i < field.length; i++)
@@ -107,9 +127,58 @@ public class TicTacToe {
 
         if (isFinished) {
             System.out.println(winner + " has won the game!\nCongratulations!");
+        }
+
+
+        if ((turnCounter == 9) && (!isFinished)) {
+            System.out.println("No winner. It´s a draw!");
+            isFinished = true;
+        }
+
+
+    } //checks if the game is won by either player
+
+    private static boolean newGame() {
+        System.out.println("\nDo you want to play again? y/n");
+
+        try {
+            String answer = input.next();
+            if (answer.equalsIgnoreCase("y")) {
+                resetGame(field);
+                game();
+            }
+            if (answer.equalsIgnoreCase("n")) {
+                System.out.println("Thanks for playing. See ya!");
+                gameOver = true;
+            } else {
+                System.out.println("Wrong input!");
+                newGame();
+            }
+
+        } catch (Exception e) {
+            System.out.println("Wrong input!");
+            newGame();
 
         }
-    } //checks if the game is won by either player
+
+
+        return gameOver;
+    }//asks you if you want a rematch or quit the game
+
+    private static void resetGame(char[][] field){
+        gameOver = false;
+        isFinished = false;
+        isPlayerX = true;
+        for (int i = 0; i < 3 ; i++) {
+            for (int j = 0; j < 3; j++) {
+                field[i][j] = '\u0000';
+
+            }
+
+        }
+
+    }//empties the board and resets all values to their default
+
 }
 
 
