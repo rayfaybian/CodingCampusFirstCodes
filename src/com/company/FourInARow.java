@@ -2,7 +2,7 @@ package com.company;
 
 import java.util.Scanner;
 
-public class TicTacToe {
+public class FourInARow {
     private static boolean gameOver = false;
     private static boolean isFinished = false;
     private static boolean isPlayerX = true;
@@ -12,7 +12,6 @@ public class TicTacToe {
     private static char o = 'O';
     private static char[][] field = new char[3][3];
     private static Scanner input = new Scanner(System.in);
-    //private static String output = "";
     private static StringBuilder output = new StringBuilder();
     private static int turnCounter = 0;
     private static String currentPlayer = "";
@@ -27,7 +26,8 @@ public class TicTacToe {
         while (!gameOver) {
 
 
-            System.out.println("\nWelcome to TicTacToe.\nBeat the other player by placing 3 X´s or 3 O`s into a straight line.\nX will make the first move.\n");
+            System.out.println("\nWelcome to Four In A Row.\nBeat the other player " +
+                    "by placing 4 X´s or 4 O`s into a straight line.\nX will make the first move.\n");
             printBoard();
             System.out.println("Type in a row, a coma, and a column. For example 1,1");
 
@@ -37,7 +37,8 @@ public class TicTacToe {
                 getUserInput();
                 printBoard();
                 checkForWinner();
-            }   newGame();
+            }
+            newGame();
 
         }
     }
@@ -87,9 +88,9 @@ public class TicTacToe {
     private static void printBoard() {
         int columnCounter = 0;
         System.out.println();
-        output.append("   1 2 3\n");
+        output.append("   0 1 2\n");
         for (int i = 0; i < 3; i++) {
-            output.append(i+1).append(" ");
+            output.append(i).append(" ");
             for (int j = 0; j < 3; j++) {
                 output.append("|");
                 output.append(field[i][j]);
@@ -165,11 +166,11 @@ public class TicTacToe {
         return gameOver;
     }//asks you if you want a rematch or quit the game
 
-    private static void resetGame(char[][] field){
+    private static void resetGame(char[][] field) {
         gameOver = false;
         isFinished = false;
         isPlayerX = true;
-        for (int i = 0; i < 3 ; i++) {
+        for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 field[i][j] = '\u0000';
 
@@ -180,6 +181,3 @@ public class TicTacToe {
     }//empties the board and resets all values to their default
 
 }
-
-
-
