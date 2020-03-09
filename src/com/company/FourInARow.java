@@ -14,21 +14,23 @@ public class FourInARow {
     private static Scanner input = new Scanner(System.in);
     private static StringBuilder output = new StringBuilder();
     private static int turnCounter = 0;
-    private static String currentPlayerSymbol = "";
     private static String currentPlayerName = "";
     private static String playerXName = "";
     private static String playerOName = "";
+    private static String winnerName = "";
+    private static String loserName = "";
 
     public static void main(String[] args) {
         language();
         getNames();
-        game();
+        runGame();
     }
 
-    private static void game() {
+    private static void runGame() {
 
 
         while (!gameOver) {
+            turnCounter = 0;
 
             if (isEnglish) {
                 System.out.println("\nWelcome to Four In A Row." +
@@ -101,14 +103,11 @@ public class FourInARow {
     }//player can pick which column he wants to drop his next chip
 
     private static void determinePlayer() {
-        turnCounter++;
 
         if (isPlayerX) {
             currentPlayerName = playerXName;
-            currentPlayerSymbol = "X";
         } else {
             currentPlayerName = playerOName;
-            currentPlayerSymbol = "O";
         }
         if (isEnglish) {
             System.out.println(currentPlayerName + ", your turn.\n");
@@ -140,11 +139,18 @@ public class FourInARow {
 
     private static void checkForWinner() {
         char winner;
+
+        turnCounter++;
+
         if (isPlayerX) {
             winner = x;
+            winnerName = playerXName;
+            loserName = playerOName;
             isPlayerX = false;
         } else {
             winner = o;
+            winnerName = playerOName;
+            loserName = playerXName;
             isPlayerX = true;
         }
 
@@ -153,8 +159,7 @@ public class FourInARow {
                 if ((chars[col] == winner) && (chars[col] == chars[col + 1])
                         && (chars[col] == chars[col + 2])
                         && (chars[col] == chars[col + 3])) {
-                    System.out.println("Player " + winner + " has won!");
-                    isFinished = true;
+                    announceWinner(winnerName, loserName);
                 }
             }
         } //check horizontally
@@ -164,8 +169,7 @@ public class FourInARow {
                 if ((field[row][col] == winner) && (field[row][col] == field[row + 1][col])
                         && (field[row][col] == field[row + 2][col])
                         && (field[row][col] == field[row + 3][col])) {
-                    System.out.println("Player " + winner + " has won!");
-                    isFinished = true;
+                    announceWinner(winnerName, loserName);
                 }
             }
         } //check vertically
@@ -175,8 +179,7 @@ public class FourInARow {
                 if ((field[row][col] == winner) && (field[row][col] == field[row + 1][col + 1])
                         && (field[row][col] == field[row + 2][col + 2])
                         && (field[row][col] == field[row + 3][col + 3])) {
-                    System.out.println("Player " + winner + " has won!");
-                    isFinished = true;
+                    announceWinner(winnerName, loserName);
                 }
             }
         } //check diagonally first direction
@@ -186,17 +189,31 @@ public class FourInARow {
                 if ((field[row][col] == winner) && (field[row][col] == field[row + 1][col - 1])
                         && (field[row][col] == field[row + 2][col - 2])
                         && (field[row][col] == field[row + 3][col - 3])) {
-                    System.out.println("Player " + winner + " has won!");
-                    isFinished = true;
+                    announceWinner(winnerName, loserName);
                 }
             }
         } //check diagonally second direction
 
         if ((turnCounter == 42) && (!isFinished)) {
-            System.out.println("No winner. It´s a draw!");
+            if (isEnglish) {
+                System.out.println("It´s a draw. No winner because both of you suck!");
+            } else {
+                System.out.println("Unentschieden! Niemand gewinnt weil ihr beide mies seid!");
+            }
             isFinished = true;
         } //check for draw
     }//checks if either player has won or if it´s a draw
+
+    private static void announceWinner(String winnerName, String loserName) {
+        if (isEnglish) {
+            System.out.println(winnerName + ", you destroyed " + loserName + " !!!");
+
+        } else {
+            System.out.println(winnerName + " du hast " + loserName + " zerstört!!!");
+        }
+        isFinished = true;
+    }
+    //announce if somebody won or if it´s a draw
 
     private static void newGame() {
         userInputIsOkay = false;
@@ -212,7 +229,7 @@ public class FourInARow {
                 if (answer.equalsIgnoreCase("y")) {
                     userInputIsOkay = true;
                     resetGame();
-                    game();
+                    runGame();
                 }
                 if (answer.equalsIgnoreCase("n")) {
                     if (isEnglish) {
@@ -269,7 +286,7 @@ public class FourInARow {
                 System.out.println("Wrong input!/Falsche Eingabe!");
         }
         return isEnglish;
-    }
+    }//choose between english and german
 
     private static void getNames() {
         if (isEnglish) {
@@ -290,7 +307,7 @@ public class FourInARow {
             playerOName = input.next();
             System.out.println("Hallo " + playerOName + "!\n");
         }
-    }
-
+    }//ask players for their names
 }
+
 
