@@ -20,6 +20,7 @@ public class FourInARow {
     private static String winnerName = "";
     private static String loserName = "";
 
+
     public static void main(String[] args) {
         language();
         getNames();
@@ -98,6 +99,7 @@ public class FourInARow {
                     System.err.println("Eingabe Fehlerhaft! Wähle eine Spalte zwischen 1 und 7.");
                     System.out.println(currentPlayerName + ", du bist dran.\n");
                 }
+
             }
         }
     }//player can pick which column he wants to drop his next chip
